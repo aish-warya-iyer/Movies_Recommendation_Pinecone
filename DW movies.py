@@ -43,9 +43,9 @@ with DAG(
             with open(file_path, 'wb') as f:
                 for chunk in response.iter_content(chunk_size=8192):
                     f.write(chunk)
-            print(f"✅ Downloaded movie data to: {file_path}")
+            print(f" Downloaded movie data to: {file_path}")
         else:
-            raise Exception(f"❌ Failed to download data: HTTP {response.status_code}")
+            raise Exception(f" Failed to download data: HTTP {response.status_code}")
         
         return file_path
 
@@ -60,7 +60,7 @@ with DAG(
         
         preprocessed_path = '/tmp/movie_data/movies_preprocessed.csv'
         df.to_csv(preprocessed_path, index=False)
-        print(f"✅ Preprocessed data saved to: {preprocessed_path}")
+        print(f"Preprocessed data saved to: {preprocessed_path}")
         return preprocessed_path
 
     @task
@@ -86,7 +86,7 @@ with DAG(
         while not pc.describe_index(index_name).status['ready']:
             time.sleep(1)
         
-        print(f"✅ Pinecone index '{index_name}' is ready.")
+        print(f"Pinecone index '{index_name}' is ready.")
         return index_name
 
     @task
@@ -115,7 +115,7 @@ with DAG(
                 for j, (_, row) in enumerate(batch_df.iterrows())
             ]
             index.upsert(upsert_data)
-            print(f"✅ Upserted batch {i // batch_size + 1} to index.")
+            print(f"Upserted batch {i // batch_size + 1} to index.")
         
         return index_name
 
@@ -136,7 +136,7 @@ with DAG(
             include_metadata=True
         )
 
-        print(f"\n🔍 Search results for query: '{query}':")
+        print(f"\nSearch results for query: '{query}':")
         for match in results['matches']:
             print(f"> {match['metadata']['title'][:80]}... (score: {match['score']:.2f})")
 
